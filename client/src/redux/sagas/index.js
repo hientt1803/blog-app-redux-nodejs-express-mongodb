@@ -1,6 +1,6 @@
-import { takeLatest, call, put } from "redux-saga/effects";
-import * as actions from "../actions";
-import * as api from "../../api";
+import { takeLatest, call, put } from 'redux-saga/effects';
+import * as actions from '../actions';
+import * as api from '../../api';
 
 function* fetchPostsSaga(action) {
   try {

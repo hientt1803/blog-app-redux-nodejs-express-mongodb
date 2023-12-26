@@ -9,44 +9,56 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
 import moment from "moment";
+import useStyles from "./styles";
+import { useDispatch } from "react-redux";
+import { updatePost } from "../../../redux/actions";
 
-const Post = ({ post }) => {
+export default function Post({ post }) {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const onLikeBtnClick = React.useCallback(() => {
+    dispatch(
+      updatePost.updatePostRequest({ ...post, likeCount: post.likeCount + 1 })
+    );
+  }, [dispatch, post]);
+
   return (
     <Card>
       <CardHeader
         avatar={<Avatar>A</Avatar>}
         title={post.author}
-        subheader={moment(post.updateAt).format("HH:MM MMM Đ, YYYY")}
+        subheader={moment(post.updatedAt).format("HH:MM MMM DD,YYYY")}
         action={
           <IconButton>
             <MoreVertIcon />
           </IconButton>
         }
       />
-      <CardMedia image={post.attachment} title="title" />
+      <CardMedia
+        image={post.attachment || ""}
+        title="Title"
+        className={classes.media}
+      />
       <CardContent>
         <Typography variant="h5" color="textPrimary">
           {post.title}
         </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="body2" component="p" color="textSecondary">
           {post.content}
         </Typography>
       </CardContent>
       <CardActions>
-        <IconButton>
+        <IconButton onClick={onLikeBtnClick}>
           <FavoriteIcon />
-          <Typography color="textSecondary" component="span">
-            {post.likeCount}
+          <Typography component="span" color="textSecondary">
+            {`${post.likeCount} likes`}
           </Typography>
         </IconButton>
       </CardActions>
     </Card>
   );
-};
-
-export default Post;
+}
